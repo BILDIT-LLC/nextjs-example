@@ -108,6 +108,13 @@ Injects VXE style-slot content into `document.head` (default) or `body` / a CSS 
 
 ```tsx
 import { StylePlaceholder } from "@bildit-platform/nextjs";
+For more detailed installation instructions and additional options, refer to the [library's documentation](https://docs.bildit.co/docs/webcms/nextjs/integration-guide).
+
+## API Reference
+For more detailed information on the library's components and hooks, refer to the [library's documentation](https://docs.bildit.co/docs/webcms/nextjs/api-reference).
+
+## Support
+For more information on how to get help or support, refer to the [library's documentation](https://docs.bildit.co/docs/webcms/support/getting-help).
 
 <StylePlaceholder slotId="global-styles" target="head" />
 <StylePlaceholder slotId="home-styles" target="head" />
