@@ -1,21 +1,27 @@
 /**
  * Example BILDIT Middleware
  *
- * This middleware automatically detects the bildit_preview_date URL parameter
- * and forwards it as a header to be used in server components.
+ * - Sets `x-pathname` so scheduled content can be matched by location
+ * - Forwards `bildit_preview_date` as a header for server components
  *
  * When a URL like: https://example.com?bildit_preview_date=2025-12-25T00:00:00.000Z
  * is accessed, the middleware will set the X-Bildit-Preview-Date header.
  */
 
-import { createBilditMiddleware } from '@bildit-platform/nextjs';
+import { enhanceMiddlewareWithBildit } from "@bildit-platform/nextjs";
+import { NextRequest, NextResponse } from "next/server";
 
-export const middleware = createBilditMiddleware({
-  onPreviewDate: (previewDate, request) => {
-    console.log(`[BILDIT Middleware] Preview date detected: ${previewDate} for ${request.url}`);
-  }
-});
+async function customMiddleware(request: NextRequest) {
+  const requestHeaders = new Headers(request.headers);
+  requestHeaders.set("x-pathname", request.nextUrl.pathname);
+
+  return NextResponse.next({
+    request: { headers: requestHeaders },
+  });
+}
+
+export const middleware = enhanceMiddlewareWithBildit(customMiddleware);
 
 export const config = {
-  matcher: '/:path*',
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
 };

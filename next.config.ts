@@ -1,11 +1,15 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
   reactStrictMode: true,
-  transpilePackages: ["bildit-nextjs"],
-  typescript: {
-    ignoreBuildErrors: true,
+  transpilePackages: ["@bildit-platform/nextjs", "@bildit-platform/react-core"],
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "**",
+      },
+    ],
   },
 };
 
