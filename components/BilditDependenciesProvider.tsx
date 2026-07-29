@@ -1,6 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
+import jsxRuntime from "react/jsx-runtime";
+import NextImage from "next/image";
+import NextLink from "next/link";
+import * as NextScript from "next/script";
 import * as Components from "@/components";
 import * as DateFns from "date-fns";
 import {
@@ -9,10 +13,18 @@ import {
   type ExtraDependencyConfig,
 } from "@bildit-platform/nextjs";
 
+/**
+ * Modules the BILDIT engine resolves when rendering scheduled content as code.
+ * Register every module your scheduled content imports, or it fails to render.
+ */
 const extraDependenciesConfig: Record<string, ExtraDependencyConfig> = {
+  react: { module: React },
+  "react/jsx-runtime": { module: jsxRuntime },
+  "next/image": { module: { default: NextImage, __esModule: true } },
+  "next/link": { module: { default: NextLink, __esModule: true } },
+  "next/script": { module: NextScript },
   "@/components": { module: Components },
   "date-fns": { module: DateFns },
-  // Add your extra dependencies here
 };
 
 interface DependencyConfigProviderProps {
@@ -25,12 +37,14 @@ const BilditDependenciesProvider = ({
   children,
 }: DependencyConfigProviderProps) => {
   return (
-    <BilditProvider
-      banners={banners}
-      extraDependenciesConfig={extraDependenciesConfig}
-    >
-      {children}
-    </BilditProvider>
+    <Suspense>
+      <BilditProvider
+        banners={banners}
+        extraDependenciesConfig={extraDependenciesConfig}
+      >
+        {children}
+      </BilditProvider>
+    </Suspense>
   );
 };
 

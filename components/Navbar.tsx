@@ -7,7 +7,7 @@ import { usePathname } from "next/navigation";
 
 const navigation = [
   { href: "/", name: "Home" },
-  { href: "/json", name: "JSON" },
+  { href: "/faq", name: "FAQ" },
 ];
 
 export function Navbar() {
@@ -18,7 +18,7 @@ export function Navbar() {
       <div className="container mx-auto flex h-16 items-center">
         <div className="mr-4 flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <span className="font-bold text-xl">BILDIT CMS Example</span>
+            <span className="font-bold text-xl">BILDIT VXE Example</span>
           </Link>
         </div>
         <div className="hidden md:flex md:flex-1 md:items-center md:justify-between">
