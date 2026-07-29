@@ -19,13 +19,13 @@ yarn add @bildit-platform/nextjs
 pnpm install @bildit-platform/nextjs
 ```
 
-For more detailed installation instructions and additional options, refer to the [library's documentation](../README.md).
+For more detailed installation instructions and additional options, refer to the [library's documentation](https://docs.bildit.co/docs/webcms/nextjs/integration-guide).
 
 ## API Reference
-For more detailed information on the library's components and hooks, refer to the [library's documentation](../README.md).
+For more detailed information on the library's components and hooks, refer to the [library's documentation](https://docs.bildit.co/docs/webcms/nextjs/api-reference).
 
 ## Support
-For more information on how to get help or support, refer to the [library's documentation](../README.md).
+For more information on how to get help or support, refer to the [library's documentation](https://docs.bildit.co/docs/webcms/support/getting-help).
 
 ## Configuring .npmrc for Private Packages
 
