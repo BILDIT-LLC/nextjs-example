@@ -1,61 +1,159 @@
-
-import type { BannerType } from "@/services/bildit.d";
 import Image from "next/image";
 import React from "react";
-import { SlotPlaceholder } from "@bildit-platform/nextjs";
+import { SlotPlaceholder, StylePlaceholder } from "@bildit-platform/nextjs";
 
-interface HomeProps {
-  banners: BannerType[];
-  remoteBaseCodeLib?: string;
-}
+const ARCADE_EMBED_SRC =
+  "https://demo.arcade.software/LyUaZaZMwkfwjseVtwaj?embed&embed_mobile=tab&embed_desktop=inline&show_copy_link=true";
 
-export default function Home({banners, remoteBaseCodeLib}: HomeProps) {
-  if (Array.isArray(banners)) console.info('fetched banners', banners);
-  if (remoteBaseCodeLib) console.info('base code lib is', remoteBaseCodeLib)
+export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <div className="flex flex-row gap-4 items-center">
+    <>
+      <StylePlaceholder slotId="home-styles" target="head" />
+
+      <section className="hero">
+        <div className="hero-logos">
           <Image
             src="/bildit.svg"
             alt="BILDIT logo"
-            width={180}
-            height={38}
+            width={150}
+            height={32}
             priority
           />
-          <span className="text-xl text-zinc-400 font-bold">+</span>
+          <span className="text-xl font-bold text-[var(--slot-border)]">+</span>
           <Image
             className="dark:invert"
             src="/next.svg"
             alt="Next.js logo"
-            width={180}
-            height={38}
+            width={130}
+            height={28}
             priority
           />
         </div>
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="mb-2 tracking-[-.01em]">
-            Banner data JSON is available at{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              pages/json.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-      </main>
-      <SlotPlaceholder slotId="home-next-slot" />
-      <SlotPlaceholder slotId="homepage11" /><SlotPlaceholder slotId="homepage11" />
-      <SlotPlaceholder slotId="home" />
-    </div>
+        <h1>Publish without redeploying.</h1>
+        <p>
+          Drop in slots, schedule banners, and inject VXE styles — then follow
+          the Arcade walkthrough below to install the editor script.
+        </p>
+      </section>
+
+      <div className="wrap">
+        <p className="slot-label">Install the editor script</p>
+        <div className="arcade-frame">
+          <iframe
+            src={ARCADE_EMBED_SRC}
+            title="Download BILDIT Script — Arcade walkthrough"
+            loading="lazy"
+            allowFullScreen
+            allow="clipboard-write"
+          />
+        </div>
+        <p style={{ margin: "0 0 8px", fontSize: 13, color: "var(--muted)" }}>
+          Prefer a separate tab?{" "}
+          <a
+            href="https://app.arcade.software/flows/LyUaZaZMwkfwjseVtwaj/view"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ color: "var(--brand)" }}
+          >
+            Open the Arcade guide
+          </a>
+          .
+        </p>
+
+        <p className="slot-label">Promo slot — home-next-slot</p>
+        <SlotPlaceholder
+          slotId="home-next-slot"
+          fallback={
+            <div>
+              No content scheduled for <code>home-next-slot</code>. Assign a
+              banner in BILDIT to fill this slot.
+            </div>
+          }
+        />
+
+        <div className="grid-cards">
+          <div className="card">
+            <h3>RemoteConnector</h3>
+            <p>
+              Fetch banners server-side with location matching and preview date
+              support.
+            </p>
+          </div>
+          <div className="card">
+            <h3>SlotPlaceholder</h3>
+            <p>
+              Render VXE content with a fallback when nothing is scheduled.
+            </p>
+          </div>
+          <div className="card">
+            <h3>StylePlaceholder</h3>
+            <p>Inject VXE-managed CSS into the document head or body.</p>
+          </div>
+        </div>
+      </div>
+
+      <div className="band">
+        <div className="wrap" style={{ paddingBottom: 0 }}>
+          <p className="slot-label">Seasonal banner — home</p>
+          <SlotPlaceholder
+            slotId="home"
+            fallback={
+              <div>
+                Empty <code>home</code> slot — schedule a promo or feature
+                banner.
+              </div>
+            }
+          />
+        </div>
+      </div>
+
+      <div className="wrap">
+        <div className="grid-cards">
+          <div className="card">
+            <h3>Preview dates</h3>
+            <p>
+              Append{" "}
+              <code>?bildit_preview_date=…</code> to preview scheduled content
+              before it goes live.
+            </p>
+          </div>
+          <div className="card">
+            <h3>Location matching</h3>
+            <p>
+              Middleware sets <code>x-pathname</code> so banners resolve to the
+              current route.
+            </p>
+          </div>
+          <div className="card">
+            <h3>Live Editor</h3>
+            <p>
+              Install the editor script so slots become editable inside BILDIT.
+            </p>
+          </div>
+        </div>
+
+        <p className="slot-label">Secondary slot — homepage11</p>
+        <SlotPlaceholder
+          slotId="homepage11"
+          fallback={
+            <div>
+              Empty <code>homepage11</code> slot.
+            </div>
+          }
+        />
+
+        <p className="slot-label">forceFallback demo — promo-logo</p>
+        <SlotPlaceholder
+          slotId="promo-logo"
+          forceFallback
+          fallback={
+            <div>
+              Default logo / promo (<code>forceFallback=true</code>) — always
+              shows this fallback for admin tooling demos.
+            </div>
+          }
+        />
+      </div>
+    </>
   );
 }
