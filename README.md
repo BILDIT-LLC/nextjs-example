@@ -1,56 +1,148 @@
 # @bildit-platform/nextjs Example
 
-**@bildit-platform/nextjs** is a library for integrating Bildit CMS with Next.js applications. This example demonstrates how to set up and use the library in a basic Next.js project.
+Reference Next.js (App Router) project for integrating **BILDIT VXE** with [`@bildit-platform/nextjs`](https://www.npmjs.com/package/@bildit-platform/nextjs) and [`@bildit-platform/nextjs-api`](https://www.npmjs.com/package/@bildit-platform/nextjs-api).
+
+This example shows:
+
+- **RemoteConnector** — server-side banner / code-lib / CSS fetching
+- **SlotPlaceholder** — slot rendering with `fallback` and `forceFallback`
+- **StylePlaceholder** — VXE-managed CSS injection into `head` / `body`
+- Preview-date middleware + location matching via `x-pathname`
+
+For the full step-by-step guide, see the [Integration Guide](https://docs.bildit.co/docs/webcms/nextjs/integration-guide).
 
 ## Installation
 
-To install the `@bildit-platform/nextjs` library, you can use either npm or yarn:
-
 ```bash
-# Using npm
-npm install @bildit-platform/nextjs
-```
-```bash
-# Using yarn
-yarn add @bildit-platform/nextjs
-```
-```bash
-# Using pnpm
-pnpm install @bildit-platform/nextjs
+npm install @bildit-platform/nextjs @bildit-platform/nextjs-api
+# or
+yarn add @bildit-platform/nextjs @bildit-platform/nextjs-api
+# or
+pnpm add @bildit-platform/nextjs @bildit-platform/nextjs-api
 ```
 
-For more detailed installation instructions and additional options, refer to the [library's documentation](../README.md).
+Both packages are public on npm — no private token or `.npmrc` required.
 
-## API Reference
-For more detailed information on the library's components and hooks, refer to the [library's documentation](../README.md).
+## Environment
 
-## Support
-For more information on how to get help or support, refer to the [library's documentation](../README.md).
+Create `.env.local` in the project root:
 
-## Configuring .npmrc for Private Packages
+```bash
+BILDIT_API_KEY=your-api-key
+BILDIT_API_URL=https://your-site.web.app   # VXE instance root (no path)
+```
 
-If you need to install private packages like `@bildit-platform/nextjs` and `@bildit-platform/engine`, you will need to request an npm token from your NPM account owner or administrator. Here are the steps:
+| Variable | Required | Description |
+|---|---|---|
+| `BILDIT_API_KEY` | ✅ | API key from Configuration → API Keys |
+| `BILDIT_API_URL` | ✅ | Root URL of your VXE instance (SDK appends `/remote-webbanners_v1_4`) |
 
-1. **Contact Your Account Owner**: Reach out to the person who owns your account (e.g., a team member, project manager) to request access to generate an npm token for you.
+## Run
 
-2. **Add the Token to `.npmrc`**: Once you have the token, create `.npmrc` file in your project directory using a text editor and add the following line:
+```bash
+npm install
+npm run dev
+```
 
-   ```plaintext
-   //registry.npmjs.org/:_authToken=<your-token>
-   ```
+## Integration examples
 
-   Replace `<your-token>` with the actual token you generated from NPM.
+### 1. RemoteConnector (server fetch)
 
-3. **Install Private Packages**: You can now install private packages using npm or yarn. For example:
+`services/bildit.ts` uses `RemoteConnector` from `@bildit-platform/nextjs-api`:
 
-   ```bash
-   # Using npm
-   npm install @bildit-platform/nextjs @bildit-platform/engine
-   ```
+```ts
+import { headers } from "next/headers";
+import { getPreviewDateFromHeaders } from "@bildit-platform/nextjs";
+import { RemoteConnector } from "@bildit-platform/nextjs-api";
 
-   ```bash
-   # Using yarn
-   yarn add @bildit-platform/nextjs @bildit-platform/engine
-   ```
+const connector = new RemoteConnector({
+  key: process.env.BILDIT_API_KEY!,
+  baseURL: process.env.BILDIT_API_URL!,
+});
 
-By following these steps, you can ensure that your project has the necessary access to install private packages like `@bildit-platform/nextjs` and `@bildit-platform/engine`. If you need further assistance or have any questions, feel free to ask!
+export async function getBanners() {
+  const headersList = await headers();
+  const pathname = headersList.get("x-pathname") || "/";
+  const previewDate = getPreviewDateFromHeaders(headersList);
+
+  const result = await connector.getWebBanners({
+    location: pathname,
+    date: previewDate,
+    mode: "csr",
+    tomorrow: true,
+    source: "live",
+  });
+
+  return result?.data ?? [];
+}
+```
+
+Other connector helpers demonstrated in this repo:
+
+- `connector.getRemoteBaseCodelib()` — remote base code library
+- `connector.getRemoteCss()` — remote CSS
+
+### 2. SlotPlaceholder with fallback
+
+```tsx
+import { SlotPlaceholder } from "@bildit-platform/nextjs";
+
+<SlotPlaceholder
+  slotId="home-next-slot"
+  fallback={
+    <div>No content scheduled — this default UI shows instead.</div>
+  }
+/>
+
+{/* Keep fallback visible for admin tooling */}
+<SlotPlaceholder
+  slotId="promo-logo"
+  forceFallback
+  fallback={<div>Default logo</div>}
+/>
+```
+
+### 3. StylePlaceholder
+
+Injects VXE style-slot content into `document.head` (default) or `body` / a CSS selector:
+
+```tsx
+import { StylePlaceholder } from "@bildit-platform/nextjs";
+
+<StylePlaceholder slotId="global-styles" target="head" />
+<StylePlaceholder slotId="home-styles" target="head" />
+```
+
+`StylePlaceholder` renders nothing visually — styles are injected via a `<style data-bildit-style-id="…">` element.
+
+### 4. Provider + middleware
+
+- `components/BilditDependenciesProvider.tsx` — client `BilditProvider` with `extraDependenciesConfig` (react, next/image, next/link, etc.)
+- `middleware.ts` — sets `x-pathname` and forwards preview date via `enhanceMiddlewareWithBildit`
+- `app/layout.tsx` — `export const dynamic = "force-dynamic"` so path/preview headers are read per request
+
+### 5. Preview date
+
+```bash
+https://localhost:3000/?bildit_preview_date=2026-02-15T00:00:00.000Z
+```
+
+## Project layout
+
+```
+app/
+  layout.tsx          # fetch banners, StylePlaceholder, footer SlotPlaceholder
+  page.tsx            # SlotPlaceholder + fallback + StylePlaceholder demos
+  faq/page.tsx        # FAQ slot examples
+components/
+  BilditDependenciesProvider.tsx
+middleware.ts
+services/bildit.ts    # RemoteConnector helpers
+next.config.ts        # transpilePackages for @bildit-platform/*
+```
+
+## Related docs
+
+- [Integration Guide](https://docs.bildit.co/docs/webcms/nextjs/integration-guide)
+- [API Reference](https://docs.bildit.co/docs/webcms/nextjs/api-reference)
+- [Next.js Cache & Image Configuration](https://docs.bildit.co/docs/webcms/setup/nextjs-config)

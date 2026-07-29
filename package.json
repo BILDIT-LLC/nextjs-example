@@ -9,7 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@bildit-platform/nextjs": "file:../bildit-platform-nextjs-0.4.17.tgz",
+    "@bildit-platform/nextjs": "^0.7.2",
+    "@bildit-platform/nextjs-api": "^0.5.2",
     "class-variance-authority": "^0.7.1",
     "classnames": "^2.5.1",
     "date-fns": "^4.1.0",
