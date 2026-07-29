@@ -141,54 +141,8 @@ services/bildit.ts    # RemoteConnector helpers
 next.config.ts        # transpilePackages for @bildit-platform/*
 ```
 
-## Hydrogen counterpart (FAQ)
-
-The sibling storefront [`../hydrogen-example`](../hydrogen-example) uses `@bildit-platform/hydrogen`. Same CMS concepts; different wiring:
-
-### Environment variables
-
-**Same names:** `BILDIT_API_KEY` / `BILDIT_API_URL`.
-
-| | This Next.js example | Hydrogen |
-|---|---|---|
-| Local file | `.env.local` | `.env` (MiniOxygen) |
-| Read path | `process.env.BILDIT_*` | **`context.env.BILDIT_*`** (Oxygen bindings) |
-| Production | Host env (e.g. Vercel) | Oxygen environment variables |
-| Fetch | `RemoteConnector` | `getBannersForRequest(request, context.env)` |
-
-Do not use `process.env` in Oxygen workers — pass `context.env` into the SDK helper.
-
-### Dependency registration
-
-**Equivalent pattern, different shape.**
-
-| | This Next.js example | Hydrogen |
-|---|---|---|
-| Config | You build `cmsDependencies` / `extraDependenciesConfig` | Package exports **`hydrogenDependenciesConfig`** |
-| Provider | `BilditProvider extraDependenciesConfig={…}` | Built in as `coreDependenciesConfig` on Hydrogen’s provider |
-| Live Editor | Same modules available to the admin script | `registerCmsDependencies()` in `entry.client.jsx` |
-
-Defaults include `react`, `react-router`, and `@shopify/hydrogen` (no `next/*`). Reference: `hydrogen-example/app/entry.client.jsx`.
-
-### Visual Editor bridge
-
-**Related idea, different script — do not reuse Next’s download on Hydrogen.**
-
-| | This Next.js example | Hydrogen |
-|---|---|---|
-| Script | VEE download → `public/scripts/bildit-cms-script.min.js` | Bundled-React **`admin.js`** (`USE_EXTERNAL_REACT=false`) |
-| Default | Host under `public/scripts/` | CDN: `https://bildit-cdn.bilditon.com/cms-client-hydrogen/scripts/admin.js` |
-| Bridge | Inline `postMessage` in layout | Exported **`BilditAdminBridge`** (via `BilditRoot`) |
-
-Optional local host on Hydrogen: `public/scripts/admin.js` + `adminScript="/scripts/admin.js"` on `BilditRoot`.
-
-**Oxygen caveats:** merge `bilditCspDirectives` into Hydrogen’s CSP and call `allowBilditIframeEmbedding()` so the VEE can iframe the storefront; don’t replace Shopify CSP wholesale. Dev preview URL/port must match the CMS website settings.
-
-Full write-up: [`../hydrogen-example/README.md`](../hydrogen-example/README.md).
-
 ## Related docs
 
-- [Hydrogen example](../hydrogen-example) — Shopify Hydrogen + `@bildit-platform/hydrogen`
 - [Integration Guide](https://docs.bildit.co/docs/webcms/nextjs/integration-guide)
 - [API Reference](https://docs.bildit.co/docs/webcms/nextjs/api-reference)
 - [Next.js Cache & Image Configuration](https://docs.bildit.co/docs/webcms/setup/nextjs-config)
