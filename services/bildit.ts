@@ -24,7 +24,7 @@ function createConnector() {
 
 /**
  * Fetch published web banners for the current request path.
- * Uses preview date from middleware headers when present (VEE preview).
+ * Uses preview date from middleware headers when present (VXE preview).
  */
 export async function getBanners(): Promise<BannerType[]> {
   const connector = createConnector();

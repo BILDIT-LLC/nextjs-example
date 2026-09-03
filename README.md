@@ -25,7 +25,7 @@ Both packages are public on npm — no private token or `.npmrc` required.
 
 ## Before you verify
 
-The VEE **Verify** button looks for `BilditProvider` on the live page — not a script tag in `<head>`. Install the SDK and wrap the app **before** you click Verify:
+The VXE **Verify** button looks for `BilditProvider` on the live page — not a script tag in `<head>`. Install the SDK and wrap the app **before** you click Verify:
 
 ```bash
 yarn add @bildit-platform/nextjs
@@ -39,7 +39,7 @@ import { BilditProvider } from '@bildit-platform/nextjs'
 </BilditProvider>
 ```
 
-This example already wraps the app in `BilditProvider` via `components/BilditDependenciesProvider.tsx`. Set your env vars, run the app, then click **Verify** in the VEE.
+This example already wraps the app in `BilditProvider` via `components/BilditDependenciesProvider.tsx`. Set your env vars, run the app, then click **Verify** in the VXE.
 
 ## Environment
 
