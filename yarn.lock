@@ -22,20 +22,20 @@
     axios "^1.7.9"
     node-cache "^5.1.2"
 
-"@bildit-platform/nextjs@^0.7.2":
-  version "0.7.2"
-  resolved "https://registry.yarnpkg.com/@bildit-platform/nextjs/-/nextjs-0.7.2.tgz#7bf3d45df26f4b61906d742ccc743b67d59ba3c8"
-  integrity sha512-B6fhKYzCuxtOH2EDeZX+oaqeYX7M7q9+QtPpPDYtktsZOGornKvPaEZAsajQgraxJD7UozGwwwJwg1L34Vf/7w==
+"@bildit-platform/nextjs@^0.7.5":
+  version "0.7.6"
+  resolved "https://registry.yarnpkg.com/@bildit-platform/nextjs/-/nextjs-0.7.6.tgz#6ffae2f51ec6828145695a3d78444ba71b8a38bb"
+  integrity sha512-TRexSvCwlu0WXqlMYmtHBoKh4FaGvckw4A8RKn2KM8RWtxmuHWctuF34G9K+qo1ttH7Pu/mhCbj63oCy8CsB2w==
   dependencies:
     "@bildit-platform/engine" "^0.1.7"
-    "@bildit-platform/react-core" "^0.2.0"
+    "@bildit-platform/react-core" "^0.2.6"
     class-variance-authority "^0.7.1"
     react-error-boundary "^6.0.0"
 
-"@bildit-platform/react-core@^0.2.0":
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/@bildit-platform/react-core/-/react-core-0.2.2.tgz#97ad072853ade0b1d3ac34d947624cd9be555537"
-  integrity sha512-l6L5xHwN/SyHvD3i39Ch0jcSHzET6cpFdw7knqdrrsAxQRi4NcT8UPtBF5SOSMPB6f/Ah86I6ZW89aK5UMTz0g==
+"@bildit-platform/react-core@^0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@bildit-platform/react-core/-/react-core-0.2.6.tgz#284ec001f279161b4f0433963f106f7433c14d34"
+  integrity sha512-vsvizQx0xSe9hvzbklZTRF4T3Umm4DcKmOf5HmaExd/YbgDNCN8C0tEC16qHIdICh6ypXhMcUfKrtaeVOxichw==
   dependencies:
     "@bildit-platform/engine" "^0.1.6"
     class-variance-authority "^0.7.1"

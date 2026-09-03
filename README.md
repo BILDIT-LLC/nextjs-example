@@ -14,12 +14,14 @@ For the full step-by-step guide, see the [Integration Guide](https://docs.bildit
 ## Installation
 
 ```bash
-npm install @bildit-platform/nextjs @bildit-platform/nextjs-api
+npm install --save-exact @bildit-platform/nextjs@^0.7.5 @bildit-platform/nextjs-api
 # or
-yarn add @bildit-platform/nextjs @bildit-platform/nextjs-api
+yarn add --exact @bildit-platform/nextjs@^0.7.5 @bildit-platform/nextjs-api
 # or
-pnpm add @bildit-platform/nextjs @bildit-platform/nextjs-api
+pnpm add --save-exact @bildit-platform/nextjs@^0.7.5 @bildit-platform/nextjs-api
 ```
+
+Requires `@bildit-platform/nextjs` **0.7.5 or later**. BilditProvider includes the Live Editor bridge and `storefrontScriptSrc` only from 0.7.5; 0.6.x has neither.
 
 Both packages are public on npm — no private token or `.npmrc` required.
 
